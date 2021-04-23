@@ -20,6 +20,7 @@ return [
         'login',
         'logout',
         'sanctum/csrf-cookie',
+        'api/v1/openStreamedResponse',
     ],
 
     'allowed_methods' => ['*'],

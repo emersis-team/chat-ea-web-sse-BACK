@@ -28,6 +28,8 @@ Route::group([
         Route::post('/login', 'LoginController@login')->name('login');
         Route::post('/logout', 'LoginController@logout')->middleware('auth:sanctum');
     });
+
+    Route::get('/openStreamedResponse/{user_id}', 'MessagesController@openStreamedResponse');
  });
 
 Route::group([
@@ -43,4 +45,5 @@ Route::group([
         Route::post('/textMessage', 'MessagesController@createTextMessage');
         Route::post('/fileMessage', 'MessagesController@createFileMessage');
     });
+
  });

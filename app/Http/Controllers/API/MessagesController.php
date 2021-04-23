@@ -2,23 +2,62 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Models\Conversation;
-use App\Models\Message;
-use App\Models\TextMessage;
-use App\Models\FileMessage;
 use App\User;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Message;
+use App\Models\FileMessage;
+use App\Models\TextMessage;
+use App\Models\Conversation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 
 class MessagesController extends Controller
 {
+
+    public function openStreamedResponse($user)
+    {
+        //$user = Auth::user();
+
+        var_dump($user);
+        $user = User::where('id', $user)
+        //$user = User::where('id', 3)
+                    ->select('id')
+                    ->withCount(['messages_received as pending_messages_count' => function (Builder $query) {
+                        $query->where('read_at',NULL);
+                    }])
+                    ->first();
+
+        $response = new StreamedResponse();
+        $response->headers->set('Content-Type', 'text/event-stream');
+        $response->headers->set('Cache-Control', 'no-cache');
+        $response->setCallback(
+            function() use($user){
+
+                $user_messages_no_read = $user->pending_messages_count;
+                 if($user_messages_no_read > 0){
+                     echo "data:" . $user_messages_no_read. "\n\n";
+                    ob_flush();
+                    flush();
+                }
+
+                   // echo "retry: 100\n\n"; // no retry would default to 3 seconds.
+                   //echo "data:" . $user->id. "\n\n";
+                    // echo "data: Hello There\n\n";
+                    // ob_flush();
+                    // flush();
+            });
+
+        return $response;
+    }
+
     public function getConversations()
     {
         $user = Auth::user();
