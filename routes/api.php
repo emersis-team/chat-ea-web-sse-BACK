@@ -44,6 +44,7 @@ Route::group([
         Route::get('/{conversation_id}', 'MessagesController@getMessagesFromConversation');
         Route::post('/textMessage', 'MessagesController@createTextMessage');
         Route::post('/fileMessage', 'MessagesController@createFileMessage');
+        Route::post('/positionMessage', 'MessagesController@createPositionMessage');
     });
 
  });
