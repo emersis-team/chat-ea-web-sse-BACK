@@ -255,7 +255,7 @@ class MessagesController extends Controller
             //Chequea los campos de entrada
             $campos = $request->validate([
                 'message' => ['required','string', 'max:255'],
-                'receiver_id' => ['required','integer']
+                'receiver_id' => ['required','integer', 'exists:users,id'],
             ]);
 
             $user_dest = User::where('id',$campos['receiver_id'])
