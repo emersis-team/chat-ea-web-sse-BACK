@@ -317,6 +317,7 @@ class MessagesController extends Controller
                 'message_id' => $message->id,
                 "sender_id" => $message->sender_id,
                 "receiver_id" => $message->receiver_id,
+                "read_at" => $message->read_at,
                 'message_created' => $message->message
             ]);
 
@@ -463,6 +464,7 @@ class MessagesController extends Controller
                 'message_id' => $message->id,
                 "sender_id" => $message->sender_id,
                 "receiver_id" => $message->receiver_id,
+                "read_at" => $message->read_at,
                 'message_created' => $message->message
             ]);
 
@@ -576,6 +578,7 @@ class MessagesController extends Controller
                 'message_id' => $message->id,
                 "sender_id" => $message->sender_id,
                 "receiver_id" => $message->receiver_id,
+                "read_at" => $message->read_at,
                 'message_created' => $message->message
             ]);
 
